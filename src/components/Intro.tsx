@@ -1,18 +1,24 @@
-import {useEffect,useRef,useState} from 'react'
+import {useEffect,useMemo,useRef,useState} from 'react'
 import {ArrowDown,ArrowRight,SkipForward,VolumeX} from 'lucide-react'
 import type {HistoryEvent} from '../types'
 import {introYearAt} from '../lib'
+// Prefer larger original photographs, with a documented date in the displayed year.
+const posterIds:Record<number,string>={1968:'A0110',1969:'A0045',1970:'A0020',1971:'K08',1972:'A0136',1973:'A0132',1974:'A0158',1975:'A0010'}
 export default function Intro({events,onStart,reduced}:{events:HistoryEvent[];onStart:()=>void;reduced:boolean}){
  const [phase,setPhase]=useState<'idle'|'rewind'|'ready'>('idle'),[year,setYear]=useState(2026)
  const started=useRef(0)
  useEffect(()=>{if(phase!=='rewind')return;let raf=0;const animate=(now:number)=>{if(!started.current)started.current=now;const t=Math.min(1,(now-started.current)/(reduced?1100:12500));setYear(introYearAt(t));if(t<1)raf=requestAnimationFrame(animate);else setPhase('ready')};raf=requestAnimationFrame(animate);return()=>cancelAnimationFrame(raf)},[phase,reduced])
- const list=events.filter(e=>e.year===year),images=list.flatMap(e=>e.media.filter(m=>m.type==='image'&&m.local))
- const photo=images.find(m=>['K01','A0063','K07','K08','K09','A0068','A0156','K17'].includes(m.id))||images[0]
+ const posters=useMemo(()=>Object.fromEntries(Object.entries(posterIds).map(([y,id])=>{
+  const images=events.filter(e=>e.year===Number(y)).flatMap(e=>e.media.filter(m=>m.type==='image'&&m.local))
+  return [y,images.find(m=>m.id===id)||images.find(m=>m.date.includes(y))]
+ })),[events])
+ useEffect(()=>{for(const photo of Object.values(posters)){if(photo?.local){const image=new Image();image.decoding='async';image.src=photo.local}}},[posters])
+ const photo=posters[year]
  const movie=year===1969?'/media/V003-preview.mp4':year===1971?'/media/V006-preview.mp4':undefined
  return <main className={`intro intro-${phase}`} onClick={e=>{if(phase==='idle'&&!(e.target as HTMLElement).closest('button'))setPhase('rewind')}}>
   <div className="intro-archive" aria-hidden="true">
-   {photo&&<img key={year} className="intro-photo" src={photo.local} alt=""/>}
-   {movie&&<video className="intro-film" key={movie} src={movie} autoPlay muted loop playsInline/>}
+   {photo&&<img key={year} className="intro-photo" src={photo.local} decoding="async" fetchPriority="high" alt=""/>}
+   {movie&&<video className="intro-film" key={movie} src={movie} poster={photo?.local} autoPlay muted loop playsInline/>}
    {(year===1975||year===1968)&&<img className={`intro-cutout ${year===1968?'intro-artillery':''}`} src={`/layers/${year===1975?'tank-1975':'artillery-1968'}-gpt.png`} alt=""/>}
   </div>
   <div className="intro-shade"/>

@@ -2,6 +2,7 @@
 
 ## Kết quả
 
+- Cập nhật ảnh mở đầu ngày 28/10/2026: ảnh/video phủ kín khung hình, opacity 100%, bỏ lớp tối dạng radial và hiệu ứng zoom mờ. Chỉ giữ gradient nhẹ ở mép, thêm bóng chữ cho số năm. Ảnh được tải trước; ưu tiên ảnh gốc lớn hơn có ngày phù hợp từng năm (1975 dùng A0010, 1200 × 768). Đã kiểm tra trực tiếp bố cục 1920 × 980 sau khi quay về 1968; [ảnh kiểm chứng](preview-intro-fullbleed.png). Build và 7 kiểm tra hiện có đều đạt.
 - `npm run build`: nhập đủ 238 sự kiện / 174 mục tư liệu, kiểm tra TypeScript và đóng gói Vite thành công.
 - `npm test`: 7/7 kiểm tra đạt. Bao phủ bảo toàn văn bản và nguồn, thứ tự năm/tháng, sự kiện chỉ biết năm, tài sản thực có trên đĩa, địa điểm quốc tế, phân loại sự kiện và khóa địa lý không trùng.
 - Kiểm tra giao diện bằng trình duyệt: khung hiển thị 721 × 664. CSS có các bố cục desktop, tablet và mobile; chưa kiểm tra trực tiếp mọi kích thước/thiết bị.
