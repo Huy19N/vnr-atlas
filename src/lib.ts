@@ -1,0 +1,13 @@
+import type {Category,HistoryEvent} from './types'
+export const YEARS=[1968,1969,1970,1971,1972,1973,1974,1975]
+export const categories:Record<Category,{label:string;color:string;short:string}>={
+ battle:{label:'Chiến trường',color:'#eaae70',short:'CHIẾN TRƯỜNG'},airstrike:{label:'Không chiến & ném bom',color:'#ed8d73',short:'KHÔNG CHIẾN'},politics:{label:'Chính trị & chỉ đạo',color:'#cdbb95',short:'CHÍNH TRỊ'},diplomacy:{label:'Ngoại giao',color:'#9dbab3',short:'NGOẠI GIAO'},solidarity:{label:'Phong trào & đoàn kết',color:'#b7b48e',short:'PHONG TRÀO'},logistics:{label:'Lực lượng & hậu cần',color:'#9daab8',short:'HẬU CẦN'},humanitarian:{label:'Con người & hậu quả',color:'#c4a0a3',short:'CON NGƯỜI'}
+}
+export const yearNotes:Record<number,{title:string;subtitle:string}>={1968:{title:'Một năm bước ngoặt.',subtitle:'Từ Mậu Thân đến bàn đàm phán Paris.'},1969:{title:'Cuộc chiến, những lựa chọn.',subtitle:'Việt Nam hóa chiến tranh và những tiếng nói phản chiến.'},1970:{title:'Chiến tranh vượt biên giới.',subtitle:'Campuchia, những cuộc biểu tình và một Đông Dương biến động.'},1971:{title:'Những mặt trận đan xen.',subtitle:'Đường 9 – Nam Lào, hậu cần và cuộc đấu trí ngoại giao.'},1972:{title:'Thử thách và đàm phán.',subtitle:'Tiến công chiến lược, không chiến và thương lượng Paris.'},1973:{title:'Hòa bình trên văn kiện.',subtitle:'Hiệp định Paris, rút quân và cuộc đấu tranh thi hành.'},1974:{title:'Chuẩn bị cho bước ngoặt.',subtitle:'Phục hồi lực lượng và những quyết định chiến lược.'},1975:{title:'Những ngày đi tới thống nhất.',subtitle:'Từ Phước Long đến mùa Xuân 1975 và những vấn đề hậu chiến.'}}
+export const normalize=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase()
+export const eventImages=(e:HistoryEvent)=>e.media.filter(m=>m.type==='image'&&m.local)
+export const eventVideos=(e:HistoryEvent)=>e.media.filter(m=>m.type==='video')
+export function firstImage(e:HistoryEvent){return eventImages(e)[0]}
+export function dateText(e:HistoryEvent){return e.month===13?`Trong năm ${e.year} · chưa xác định tháng`:`${e.dateLabel} · ${e.year}`}
+export function introYearAt(t:number){return 2026-Math.round(58*(1-Math.pow(1-Math.max(0,Math.min(1,t)),2.75)))}
+export function sidesFor(event:HistoryEvent):[string,string]{if(event.id==='E169')return ['VNCH','Trung Quốc'];if(event.id==='E224')return ['Hoa Kỳ','Khmer Đỏ'];if(event.id==='E226')return ['Việt Nam','Khmer Đỏ'];if(['E018','E054'].includes(event.id))return ['Phía cách mạng','Australia / VNCH'];return ['Phía cách mạng',event.year>=1973?'VNCH':'Mỹ / VNCH và đồng minh']}
