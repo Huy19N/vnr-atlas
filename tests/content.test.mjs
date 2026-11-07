@@ -15,9 +15,14 @@ test('Preserves all 238 events and every cited source',()=>{
 test('Events remain chronological and annual-only events never become a fictitious month',()=>{
  let previous=0;for(const e of data.events){const value=e.year*10000+e.month*100+e.day;assert.ok(value>=previous,e.id);previous=value;assert.ok(e.month>=1&&e.month<=13);assert.ok(e.progress>=0&&e.progress<=1);if(e.month===13){assert.equal(e.day,0);assert.equal(e.progress,.985)}}
 })
-test('Every local photograph and video preview exists; no URL shortcut is passed off as a film',()=>{
- const checked=new Set();for(const e of data.events)for(const m of e.media){if(checked.has(m.id))continue;checked.add(m.id);if(m.local){assert.equal(m.type,'image');assert.ok(fs.existsSync(path.join(project,'public',m.local)))}if(m.type==='video'&&m.status==='downloaded')assert.ok(fs.statSync(path.join(project,'public/media',m.id+'-preview.mp4')).size>1000)}
- assert.equal(checked.size,174)
+test('Every local photo and video file or video preview exists',()=>{
+ const checked=new Set();for(const e of data.events)for(const m of e.media){if(checked.has(m.id))continue;checked.add(m.id);if(m.local){assert.ok(fs.existsSync(path.join(project,'public',decodeURI(m.local))),m.id);if(m.type==='video')assert.equal(m.status,'downloaded')}if(m.type==='video'&&m.status==='downloaded'&&!m.local)assert.ok(fs.statSync(path.join(project,'public/media',m.id+'-preview.mp4')).size>1000)}
+ assert.equal(checked.size,187)
+})
+test('User documentary videos are attached to the requested events with the supplied YouTube source',()=>{
+ const manifest=JSON.parse(fs.readFileSync(path.join(project,'scripts/documentary-videos.json'),'utf8')),source='https://www.youtube.com/watch?v=pcVky6f4xn4&list=WL&index=11'
+ assert.equal(manifest.length,13)
+ for(const item of manifest){const event=data.events.find(e=>e.id===item.eventId),media=event?.media.find(m=>m.id===item.id);assert.ok(media,item.id);assert.equal(media.type,'video');assert.equal(media.source,source);assert.equal(media.url,source);assert.equal(media.local,encodeURI('/media/video_tài_liệu/'+item.filename));assert.ok(fs.existsSync(path.join(project,'public',decodeURI(media.local))),item.filename)}
 })
 test('Geographic anchors are valid, and international events are not all placed in Vietnam',()=>{
  const foreign=data.events.filter(e=>!['Việt Nam','Biển Đông'].includes(e.place.country));assert.ok(foreign.length>50)

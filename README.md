@@ -22,7 +22,13 @@ npm run build
 npm run preview
 ```
 
-Bản build ở `dist`, bản xem trước production ở http://127.0.0.1:4173 . Khi triển khai tĩnh, phim có bản xem trước 24 giây và liên kết bản số hóa đầy đủ. Các ảnh, bản đồ, dữ liệu và hai lớp PNG nằm trong bản build; không phụ thuộc máy chủ bản đồ hoặc khóa API.
+Bản build ở `dist`, bản xem trước production ở http://127.0.0.1:4173 . Các phim trong thư viện đối chiếu dùng bản xem trước ngắn và liên kết tới nguồn đầy đủ; 14 video tài liệu bổ sung có bản phát web 1080p trong kho dự án. Ảnh, bản đồ và dữ liệu đều nằm trong bản build; không phụ thuộc máy chủ bản đồ hoặc khóa API.
+
+## Triển khai trên Vercel
+
+Repo đã có `vercel.json`: lệnh build là `npm run build`, thư mục đầu ra là `dist`. Khi Vercel build từ repo, script dùng dữ liệu đã sinh sẵn trong `public/` thay vì đòi hỏi kho nghiên cứu nằm ngoài repo. Khi chạy tại máy phát triển có đủ kho nguồn bên cạnh dự án, `npm run content` vẫn tái tạo dữ liệu từ tài liệu nghiên cứu.
+
+Các file video trong `public/media/video_tài_liệu/` là bản web 1080p đã tối ưu bitrate và hỗ trợ tải phát tuần tự; file gốc được giữ riêng trong `D:\FPT\Kì 9\VNR\_source_media_backup\vnr-atlas\video_tai_lieu`. Video chỉ được tải khi mở hồ sơ tư liệu. Các bundle Vite có tên băm được cache dài hạn; dữ liệu timeline được CDN kiểm tra định kỳ.
 
 ## Luồng trải nghiệm
 
@@ -55,7 +61,7 @@ scripts/          Nhập dữ liệu, quy ước địa lý và xử lý video
 tests/            Kiểm tra bảo toàn nội dung, nguồn, địa điểm và tư liệu
 ```
 
-Chạy lại `node scripts/prepare-video-previews.mjs` nếu bổ sung phim. Lệnh dùng FFmpeg từ gói `ffmpeg-static`, chỉ sinh bản xem trước; không sửa phim trong kho gốc.
+Chạy `npm run optimize:media` để tạo bản 1080p bitrate thấp cho các video tài liệu mới. Lệnh sao lưu tệp đầu vào bên ngoài repo trước khi thay bản công khai; không sửa bản gốc đã sao lưu.
 
 ## Công nghệ và tài liệu
 

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..')
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..')
 export default function localMedia(){return{name:'local-history-video-library',configureServer(server){
  const inventory=JSON.parse(fs.readFileSync(path.join(root,'Kho_anh_video_Timeline_1968_1975/Du_lieu_doi_chieu/danh_muc_tu_lieu.json'),'utf8'))
  const videos=new Map(inventory.filter(x=>x.type==='video'&&x.status==='downloaded').map(x=>[x.aid,path.join(root,'Kho_anh_video_Timeline_1968_1975',x.local_file)]))
