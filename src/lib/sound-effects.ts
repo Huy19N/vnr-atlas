@@ -50,11 +50,11 @@ export function stopIntroCountdown(){
 
 export function playIntroBattleOnce(){
  playIntroAudio(sound('gun_ak47.mp3'),.36,1.08)
- introOneShots.push(...playBombLayer(.52))
+ introOneShots.push(...playBombLayer(.41))
 }
 
 export function playIntroBombsOnce(){
- introOneShots.push(...playBombLayer(.56))
+ introOneShots.push(...playBombLayer(.44))
 }
 
 export function playIntroMusicOnce(){
@@ -75,5 +75,5 @@ export function playEventSounds(event:HistoryEvent){
  const battlefield=event.category==='battle'
  if(!bombing&&!battlefield)return
  if(battlefield)eventAudio.push(playAudio(sound('gun_ak47.mp3'),.34,false,1.08))
- if(bombing||battlefield)eventAudio.push(...playBombLayer(battlefield ? .54 : .66))
+ if(bombing||battlefield)eventAudio.push(...playBombLayer(battlefield ? .42 : .5))
 }
