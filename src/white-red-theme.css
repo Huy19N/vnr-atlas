@@ -70,6 +70,12 @@ strong,b{color:var(--red)}
 .settings-popover{background:var(--paper);border:1px solid var(--ink);box-shadow:5px 5px 0 #17171726;color:var(--ink)}
 .settings-popover input{accent-color:var(--red)}
 .settings-popover p{color:var(--ink-muted)}
+.settings-popover{width:min(280px,calc(100vw - 32px))}
+.settings-volume-label{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-weight:650}
+.settings-volume-label>span{display:flex;align-items:center;gap:7px}
+.settings-volume-label svg,.settings-volume-label output{color:var(--red)}
+.settings-volume-label output{font-variant-numeric:tabular-nums}
+.settings-popover input.settings-volume-slider{display:block;width:100%;height:20px;margin:8px 0 0;cursor:pointer;accent-color:var(--red)}
 
 /* Map canvas */
 .explorer{background:var(--paper)}
