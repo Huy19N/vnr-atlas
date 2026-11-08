@@ -4,12 +4,14 @@ import Intro from './components/Intro'
 import AtlasMap from './components/AtlasMap'
 import Timeline from './components/Timeline'
 import {categories,firstImage,sidesFor,yearNotes,YEARS} from './lib'
+import {playEventSounds,stopEventSounds} from './lib/sound-effects'
 import type {HistoryData,HistoryEvent} from './types'
 const EventModal=lazy(()=>import('./components/EventModal'))
 const ArchivePanel=lazy(()=>import('./components/ArchivePanel'))
 export default function App(){
  const [data,setData]=useState<HistoryData|null>(null),[error,setError]=useState(''),[entered,setEntered]=useState(false),[year,setYear]=useState(1968),[selectedId,setSelectedId]=useState<string|null>(null),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(1),[progress,setProgress]=useState(0),[world,setWorld]=useState(false),[flash,setFlash]=useState<number|null>(null),[detail,setDetail]=useState(false),[panel,setPanel]=useState<'index'|'about'|null>(null),[reduced,setReduced]=useState(()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches),[controls,setControls]=useState(false)
  const resumeAfterModal=useRef(false),lastYear=useRef(1968)
+ useEffect(()=>()=>stopEventSounds(),[])
  useEffect(()=>{const abort=new AbortController();fetch('/data/history.json',{signal:abort.signal}).then(r=>{if(!r.ok)throw Error('Không đọc được dữ liệu timeline.');return r.json()}).then(setData).catch(e=>{if(e.name!=='AbortError')setError(e.message)});return()=>abort.abort()},[])
  const events=useMemo(()=>data?.events.filter(e=>e.year===year)||[],[data,year])
  const active=useMemo(()=>data?.events.find(e=>e.id===selectedId)||null,[data,selectedId])
@@ -17,9 +19,9 @@ export default function App(){
  const hero=useMemo(()=>events.find(e=>['E003','E054','E071','E087','E135','E143','E183','E223'].includes(e.id))||events.find(e=>firstImage(e)),[events])
  useEffect(()=>{if(entered&&(year!==lastYear.current)){setFlash(year);lastYear.current=year}},[year,entered])
  useEffect(()=>{if(flash===null)return;const t=setTimeout(()=>setFlash(null),reduced?350:1600);return()=>clearTimeout(t)},[flash,reduced])
- const select=useCallback((e:HistoryEvent)=>{setPlaying(false);setYear(e.year);setSelectedId(e.id);setProgress(e.progress);setWorld(false);setPanel(null)},[])
- const move=useCallback((delta:number,auto=false)=>{if(!data)return;const current=selectedId?data.events.findIndex(e=>e.id===selectedId):data.events.findIndex(e=>e.year===year)-(delta>0?1:-1);const next=data.events[Math.max(0,Math.min(data.events.length-1,current+delta))];if(!next)return;if(!auto)setPlaying(false);setYear(next.year);setSelectedId(next.id);setProgress(next.progress);setWorld(false);if(auto&&current>=data.events.length-1)setPlaying(false)},[data,selectedId,year])
- const play=useCallback(()=>{if(!selectedId&&events[0]){setSelectedId(events[0].id);setProgress(events[0].progress)}if(activeIndex===((data?.events.length||0)-1)&&!playing){setYear(1968);setSelectedId(data!.events[0].id);setProgress(0)}setPlaying(p=>!p)},[selectedId,events,activeIndex,data,playing])
+ const select=useCallback((e:HistoryEvent)=>{playEventSounds(e);setPlaying(false);setYear(e.year);setSelectedId(e.id);setProgress(e.progress);setWorld(false);setPanel(null)},[])
+ const move=useCallback((delta:number,auto=false)=>{if(!data)return;const current=selectedId?data.events.findIndex(e=>e.id===selectedId):data.events.findIndex(e=>e.year===year)-(delta>0?1:-1);const next=data.events[Math.max(0,Math.min(data.events.length-1,current+delta))];if(!next)return;if(next.id!==selectedId)playEventSounds(next);if(!auto)setPlaying(false);setYear(next.year);setSelectedId(next.id);setProgress(next.progress);setWorld(false);if(auto&&current>=data.events.length-1)setPlaying(false)},[data,selectedId,year])
+ const play=useCallback(()=>{if(!selectedId&&events[0]){playEventSounds(events[0]);setSelectedId(events[0].id);setProgress(events[0].progress)}if(activeIndex===((data?.events.length||0)-1)&&!playing){setYear(1968);setSelectedId(data!.events[0].id);setProgress(0);playEventSounds(data!.events[0])}setPlaying(p=>!p)},[selectedId,events,activeIndex,data,playing])
  const openActive=useCallback(()=>{resumeAfterModal.current=playing;setPlaying(false);setDetail(true)},[playing])
  const closeDetail=useCallback(()=>{setDetail(false);if(resumeAfterModal.current){setPlaying(true);resumeAfterModal.current=false}},[])
  useEffect(()=>{if(!playing||!active||flash!==null||detail||panel)return;const duration=6500/speed,start=performance.now(),next=data?.events[activeIndex+1];const p2=next?.year===year?next.progress:1;let frame=0,lastPaint=0;const animate=(now:number)=>{const t=Math.min(1,(now-start)/duration);if(now-lastPaint>=33||t>=1){setProgress(active.progress+(p2-active.progress)*t);lastPaint=now}if(t>=1){move(1,true);return}frame=requestAnimationFrame(animate)};frame=requestAnimationFrame(animate);return()=>cancelAnimationFrame(frame)},[playing,active,activeIndex,data,speed,year,move,detail,panel,flash])
