@@ -181,7 +181,7 @@ Trong sử liệu Việt Nam, giai đoạn này nằm trong kháng chiến chố
 | 18–29/12 | Linebacker II tập kích Hà Nội, Hải Phòng và các mục tiêu miền Bắc; phòng không Việt Nam chống trả. Nguồn Việt Nam gọi là 12 ngày đêm, trong khi quân sử Mỹ thường tính 11 ngày đánh do có ngày tạm ngừng dịp Giáng sinh. [S37] [S38] |
 | Cuối tháng 12 | Không chiến dừng trước khi đàm phán nối lại tháng 1/1973. Những tổn thất, sức ép ngoại giao và quá trình thương lượng có trước phải được xét cùng nhau; không quy toàn bộ kết quả Paris cho một đợt đánh. [S36] [S93] |
 
-**Phân tích:** Năm 1972 cho thấy rõ ba điều: lực lượng cách mạng có thể tiến công quy ước lớn; quân VNCH vẫn có khả năng chống giữ trên một số hướng với hỗ trợ mạnh; đồng minh lớn có thể tiếp tục viện trợ nhưng không đặt chiến tranh Việt Nam lên trên mọi ưu tiên khác. Mọi đánh giá năm 1975 phải lưu ý sự khác biệt rất lớn về khả năng sử dụng hỏa lực Mỹ so với năm 1972.
+**Phân tích:** Năm 1972 cho thấy rõ ba điều: lực lượng cách mạng có thể tiến công quy ước lớn; quân VNCH vẫn có khả năng chống giữ trên một số hướng với hỗ trợ mạnh; đồng minh lớn có thể tiếp tục viện trợ nhưng không đặt cuộc chiến ở Việt Nam lên trên mọi ưu tiên khác. Mọi đánh giá năm 1975 phải lưu ý sự khác biệt rất lớn về khả năng sử dụng hỏa lực Mỹ so với năm 1972.
 
 ### 3.6. Năm 1973 — Paris thay đổi cấu trúc chiến tranh, chưa đem lại hòa bình bền vững
 
